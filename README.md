@@ -1,69 +1,7 @@
-*Psst — looking for a shareable component template? Go here --> [sveltejs/component-template](https://github.com/sveltejs/component-template)*
+# Purpose of this small project
 
----
+In an effort to up my animation game while lowering the overall complexity of my code, I've been learning how to combine [Svelte](https://svelte.dev) with [d3 Force layouts](https://github.com/d3/d3-force).
 
-# svelte app
+As it turns out, it's hard to use `force` without understanding [d3 Selections](https://bost.ocks.org/mike/selection/), especially if the goal is to add- and remove shapes in response to user events. This is true even though there are no direct dependencies between the two projects; all the sample code I could find on animating objects in- and out of a `force` layout _use_ Selections, and those examples don't clearly delineate the boundaries between `force` and `selection`. You just kinda have to know. Which means learning. Which is hard to do without playing around with actual code. Hence: this project.
 
-This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template.
-
-To create a new project based on this template using [degit](https://github.com/Rich-Harris/degit):
-
-```bash
-npx degit sveltejs/template svelte-app
-cd svelte-app
-```
-
-*Note that you will need to have [Node.js](https://nodejs.org) installed.*
-
-
-## Get started
-
-Install the dependencies...
-
-```bash
-cd svelte-app
-npm install
-```
-
-...then start [Rollup](https://rollupjs.org):
-
-```bash
-npm run dev
-```
-
-Navigate to [localhost:5000](http://localhost:5000). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
-
-
-## Deploying to the web
-
-### With [now](https://zeit.co/now)
-
-Install `now` if you haven't already:
-
-```bash
-npm install -g now
-```
-
-Then, from within your project folder:
-
-```bash
-cd public
-now
-```
-
-As an alternative, use the [Now desktop client](https://zeit.co/download) and simply drag the unzipped project folder to the taskbar icon.
-
-### With [surge](https://surge.sh/)
-
-Install `surge` if you haven't already:
-
-```bash
-npm install -g surge
-```
-
-Then, from within your project folder:
-
-```bash
-npm run build
-surge public
-```
+My next project will attempt to combine what I've learned here about Selections with what I learned [here](https://github.com/clozach/Playing-with-d3-Force-Layouts-in-Svelte) about `d3` Force.

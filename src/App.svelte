@@ -17,9 +17,7 @@
       var t = d3.transition().duration(750);
 
       // JOIN new data with old elements.
-      var text = g.selectAll("text").data(data, function(d) {
-        return d;
-      });
+      var text = g.selectAll("text").data(data, d => d);
 
       // EXIT old elements not present in new data.
       text
@@ -27,7 +25,7 @@
         .attr("class", "exit")
         .transition(t)
         .attr("y", 60)
-        .style("fill-opacity", 1e-6)
+        .style("fill-opacity", 0)
         .remove();
 
       // UPDATE old elements present in new data.
@@ -50,7 +48,7 @@
         .attr("x", function(d, i) {
           return i * 32;
         })
-        .style("fill-opacity", 1e-6)
+        .style("fill-opacity", 0)
         .text(function(d) {
           return d;
         })

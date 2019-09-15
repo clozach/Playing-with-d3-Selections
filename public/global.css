@@ -5,8 +5,8 @@ html, body {
 }
 
 body {
-	color: white;
-	background-color: black;
+	color: #333;
+	background-color: #ddd;
 	font-size: 3rem;
 	margin: 0;
 	padding: 8px;
@@ -61,4 +61,20 @@ button:active {
 
 button:focus {
 	border-color: #666;
+}
+
+text {
+	font: bold 48px monospace;
+}
+
+.enter {
+	fill: green;
+}
+
+.update {
+	fill: #333;
+}
+
+.exit {
+	fill: brown;
 }

@@ -1,85 +1,92 @@
 <script>
+  // https://bl.ocks.org/mbostock/3808234
   import { onMount } from "svelte";
-  import { datas } from "./DataSource.svelte";
+
+  let width;
+  let height;
 
   onMount(() => {
-    var array = datas[0];
+    const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
 
-    function display() {
-      var selection = d3
-        .select("#wrapper")
-        .selectAll("div")
-        .data(array, d => d.age);
+    const svg = d3.select("svg");
+    const g = svg
+      .append("g")
+      .attr("transform", "translate(32," + height / 2 + ")");
 
-      selection.selectAll("div").classed("new", false);
+    function update(data) {
+      var t = d3.transition().duration(750);
 
-      var selectionEnter = selection
-        .enter()
-        .append("div")
-        .classed("new", true)
-        .classed("person", true);
+      // JOIN new data with old elements.
+      var text = g.selectAll("text").data(data, function(d) {
+        return d;
+      });
 
-      selectionEnter
-        .append("p")
-        .classed("name", true)
-        .html(d => d.name);
-
-      selectionEnter
-        .append("p")
-        .classed("age", true)
-        .html(d => d.age);
-
-      selection
+      // EXIT old elements not present in new data.
+      text
         .exit()
-        .transition()
-        .duration(2000)
-        .styleTween("color", function() {
-          return d3.interpolate("red", "black");
-        })
+        .attr("class", "exit")
+        .transition(t)
+        .attr("y", 60)
+        .style("fill-opacity", 1e-6)
         .remove();
 
-      selectionEnter
-        .transition()
-        .duration(2000)
-        .styleTween("color", function() {
-          return d3.interpolate("green", "salmon");
+      // UPDATE old elements present in new data.
+      text
+        .attr("class", "update")
+        .attr("y", 0)
+        .style("fill-opacity", 1)
+        .transition(t)
+        .attr("x", function(d, i) {
+          return i * 32;
         });
 
-      selection.select(".name").html(d => d.name);
-
-      selection.select(".age").html(d => d.age);
+      // ENTER new elements present in new data.
+      text
+        .enter()
+        .append("text")
+        .attr("class", "enter")
+        .attr("dy", ".35em")
+        .attr("y", -60)
+        .attr("x", function(d, i) {
+          return i * 32;
+        })
+        .style("fill-opacity", 1e-6)
+        .text(function(d) {
+          return d;
+        })
+        .transition(t)
+        .attr("y", 0)
+        .style("fill-opacity", 1);
     }
 
-    display();
+    // The initial display.
+    update(alphabet);
 
-    const pause = 3000;
-
-    setTimeout(function() {
-      array = datas[1];
-      display();
-
-      setTimeout(function() {
-        array = datas[2];
-        display();
-
-        setTimeout(function() {
-          array = datas[3];
-          display();
-
-          setTimeout(function() {
-            array = datas[4];
-            display();
-          }, pause);
-        }, pause);
-      }, pause);
-    }, pause);
+    // Grab a random sample of letters from the alphabet, in alphabetical order.
+    d3.interval(function() {
+      update(
+        d3
+          .shuffle(alphabet)
+          .slice(0, Math.floor(Math.random() * 26))
+          .sort()
+      );
+    }, 1500);
   });
 </script>
 
 <style>
-  .new {
-    color: red;
+  svg {
+    font-family: "Helvetica", "Arial", sans-serif;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to top, #ddfdff, #6dd5fa, #2980b9);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
   }
 </style>
 
-<div id="wrapper" />
+<svelte:window bind:innerWidth={width} bind:innerHeight={height} />
+
+<svg {width} {height} />

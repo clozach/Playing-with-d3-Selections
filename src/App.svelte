@@ -5,13 +5,16 @@
   let width;
   let height;
 
+  const letterSpacing = 32;
+  const travelDistance = 60;
+
   onMount(() => {
     const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
 
     const svg = d3.select("svg");
     const g = svg
       .append("g")
-      .attr("transform", "translate(32," + height / 2 + ")");
+      .attr("transform", `translate(${letterSpacing}, ${height / 2})`);
 
     function update(data) {
       var t = d3.transition().duration(750);
@@ -24,7 +27,7 @@
         .exit()
         .attr("class", "exit")
         .transition(t)
-        .attr("y", 60)
+        .attr("y", travelDistance)
         .style("fill-opacity", 0)
         .remove();
 
@@ -35,7 +38,7 @@
         .style("fill-opacity", 1)
         .transition(t)
         .attr("x", function(d, i) {
-          return i * 32;
+          return i * letterSpacing;
         });
 
       // ENTER new elements present in new data.
@@ -43,10 +46,10 @@
         .enter()
         .append("text")
         .attr("class", "enter")
-        .attr("dy", ".35em")
-        .attr("y", -60)
+        .attr("dy", ".35em") // 👈 https://stackoverflow.com/questions/19127035/what-is-the-difference-between-svgs-x-and-dx-attribute
+        .attr("y", -travelDistance)
         .attr("x", function(d, i) {
-          return i * 32;
+          return i * letterSpacing;
         })
         .style("fill-opacity", 0)
         .text(function(d) {

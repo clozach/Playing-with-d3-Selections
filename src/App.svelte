@@ -32,44 +32,45 @@
       var t = d3.transition().duration(750);
 
       // JOIN new data with old elements.
-      var svgs = g.selectAll("svg").data(data, d => d);
-
-      // EXIT old elements not present in new data.
-      svgs
-        .exit()
-        .attr("class", "exit")
-        .transition(t)
-        .attr("y", travelDistance)
-        .style("fill-opacity", 0)
-        .remove();
-
-      // UPDATE old elements present in new data.
-      svgs
-        .attr("class", "update")
-        .attr("y", 0)
-        .style("fill-opacity", 1)
-        .transition(t)
-        .attr("x", function(d, i) {
-          return i * letterSpacing;
-        });
-
-      // ENTER new elements present in new data.
-      const appended = svgs.enter().append(balloonCreator);
-
-      const attred = appended
-        .attr("class", "enter")
-        .attr("dy", ".35em") // 👈 https://stackoverflow.com/questions/19127035/what-is-the-difference-between-svgs-x-and-dx-attribute
-        .attr("y", -travelDistance)
-        .attr("x", function(d, i) {
-          return i * letterSpacing;
-        })
-        .style("fill-opacity", 0)
-        // .text(function(d) {
-        //   return d;
-        // })
-        .transition(t)
-        .attr("y", 0)
-        .style("fill-opacity", 1);
+      var svgs = g
+        .selectAll("svg")
+        .data(data, d => d)
+        .join(
+          enter =>
+            enter
+              .append(balloonCreator)
+              .attr("class", "enter")
+              .attr("dy", ".35em") // 👈 https://stackoverflow.com/questions/19127035/what-is-the-difference-between-svgs-x-and-dx-attribute
+              .attr("y", -travelDistance)
+              .attr("x", function(d, i) {
+                return i * letterSpacing;
+              })
+              .style("fill-opacity", 0)
+              .call(e =>
+                e
+                  .transition(t)
+                  .attr("y", 0)
+                  .style("fill-opacity", 1)
+              ),
+          update =>
+            update
+              .attr("class", "update")
+              .attr("y", 0)
+              .style("fill-opacity", 1)
+              .call(u =>
+                u.transition(t).attr("x", function(d, i) {
+                  return i * letterSpacing;
+                })
+              ),
+          exit =>
+            exit.attr("class", "exit").call(x =>
+              x
+                .transition(t)
+                .attr("y", travelDistance)
+                .style("fill-opacity", 0)
+                .remove()
+            )
+        );
     }
 
     // The initial display.

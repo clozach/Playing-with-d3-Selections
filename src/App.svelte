@@ -1,6 +1,7 @@
 <script>
   // https://bl.ocks.org/mbostock/3808234
   import { onMount } from "svelte";
+  import Balloon from "./Balloon.svelte";
 
   let width;
   let height;
@@ -14,16 +15,17 @@
     const svg = d3.select("svg");
     const g = svg
       .append("g")
+      .attr("id", "balloon-group")
       .attr("transform", `translate(${letterSpacing}, ${height / 2})`);
 
     function update(data) {
       var t = d3.transition().duration(750);
 
       // JOIN new data with old elements.
-      var text = g.selectAll("text").data(data, d => d);
+      var svgs = g.selectAll("svg").data(data, d => d);
 
       // EXIT old elements not present in new data.
-      text
+      svgs
         .exit()
         .attr("class", "exit")
         .transition(t)
@@ -32,7 +34,7 @@
         .remove();
 
       // UPDATE old elements present in new data.
-      text
+      svgs
         .attr("class", "update")
         .attr("y", 0)
         .style("fill-opacity", 1)
@@ -42,9 +44,23 @@
         });
 
       // ENTER new elements present in new data.
-      text
-        .enter()
-        .append("text")
+      const appended = svgs.enter().append(() => {
+        const templateBalloon = document.getElementsByClassName(
+          "template-balloon"
+        )[0];
+        const balloonGroup = document.getElementById("balloon-group");
+
+        console.log(balloonGroup);
+
+        // Inspired by https://stackoverflow.com/questions/18517376/d3-append-duplicates-of-a-selection @eagor
+        var clone = templateBalloon.cloneNode(true);
+        // clone.getElementsByTagName("text")[0].innerHTML = d;
+        clone.classList.toggle("template-balloon");
+        // balloonGroup.append(clone);
+        return clone;
+      });
+
+      const attred = appended
         .attr("class", "enter")
         .attr("dy", ".35em") // 👈 https://stackoverflow.com/questions/19127035/what-is-the-difference-between-svgs-x-and-dx-attribute
         .attr("y", -travelDistance)
@@ -52,9 +68,9 @@
           return i * letterSpacing;
         })
         .style("fill-opacity", 0)
-        .text(function(d) {
-          return d;
-        })
+        // .text(function(d) {
+        //   return d;
+        // })
         .transition(t)
         .attr("y", 0)
         .style("fill-opacity", 1);
@@ -90,4 +106,10 @@
 
 <svelte:window bind:innerWidth={width} bind:innerHeight={height} />
 
-<svg {width} {height} />
+<svg {width} {height}>
+  <defs>
+    <g id="empty-balloon">
+      <Balloon id="template" />
+    </g>
+  </defs>
+</svg>

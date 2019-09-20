@@ -13,13 +13,13 @@
     const templateBalloon = document.getElementsByClassName(
       "template-balloon"
     )[0];
-    const balloonGroup = document.getElementById("balloon-group");
+
+    console.log(`this: ${JSON.stringify(this)}`);
 
     // Inspired by https://stackoverflow.com/questions/18517376/d3-append-duplicates-of-a-selection @eagor
     var clone = templateBalloon.cloneNode(true);
     // clone.getElementsByTagName("text")[0].innerHTML = d;
     clone.classList.toggle("template-balloon");
-    // balloonGroup.append(clone);
     return clone;
   };
 

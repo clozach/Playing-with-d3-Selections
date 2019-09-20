@@ -12,11 +12,7 @@
   onMount(() => {
     const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
 
-    const svg = d3.select("svg");
-    const g = svg
-      .append("g")
-      .attr("id", "balloon-group")
-      .attr("transform", `translate(${letterSpacing}, ${height / 2})`);
+    const g = d3.select("svg").select("g");
 
     function update(data) {
       var t = d3.transition().duration(750);
@@ -49,8 +45,6 @@
           "template-balloon"
         )[0];
         const balloonGroup = document.getElementById("balloon-group");
-
-        console.log(balloonGroup);
 
         // Inspired by https://stackoverflow.com/questions/18517376/d3-append-duplicates-of-a-selection @eagor
         var clone = templateBalloon.cloneNode(true);
@@ -107,6 +101,7 @@
 <svelte:window bind:innerWidth={width} bind:innerHeight={height} />
 
 <svg {width} {height}>
+  <g id="balloon-group" transform="translate(32, 449.5)" />
   <defs>
     <g id="empty-balloon">
       <Balloon id="template" />

@@ -9,6 +9,20 @@
   const letterSpacing = 32;
   const travelDistance = 60;
 
+  const balloonCreator = () => {
+    const templateBalloon = document.getElementsByClassName(
+      "template-balloon"
+    )[0];
+    const balloonGroup = document.getElementById("balloon-group");
+
+    // Inspired by https://stackoverflow.com/questions/18517376/d3-append-duplicates-of-a-selection @eagor
+    var clone = templateBalloon.cloneNode(true);
+    // clone.getElementsByTagName("text")[0].innerHTML = d;
+    clone.classList.toggle("template-balloon");
+    // balloonGroup.append(clone);
+    return clone;
+  };
+
   onMount(() => {
     const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
 
@@ -40,19 +54,7 @@
         });
 
       // ENTER new elements present in new data.
-      const appended = svgs.enter().append(() => {
-        const templateBalloon = document.getElementsByClassName(
-          "template-balloon"
-        )[0];
-        const balloonGroup = document.getElementById("balloon-group");
-
-        // Inspired by https://stackoverflow.com/questions/18517376/d3-append-duplicates-of-a-selection @eagor
-        var clone = templateBalloon.cloneNode(true);
-        // clone.getElementsByTagName("text")[0].innerHTML = d;
-        clone.classList.toggle("template-balloon");
-        // balloonGroup.append(clone);
-        return clone;
-      });
+      const appended = svgs.enter().append(balloonCreator);
 
       const attred = appended
         .attr("class", "enter")
